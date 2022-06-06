@@ -10,16 +10,36 @@ class CartItem extends React.Component{
         img: ''
       }  
     }
+
     // function to increase
     increaseQuantity = () => {
         console.log('this', this.state); // binding is not needed in arror function
+        
+        // 1st way to setState
+        this.setState({                // this is easy do this
+            qty:this.state.qty + 1    //this is called shallow merging where only that property is changed not others
+        });
 
+        //2nd way to setState
+        // this .setState((prevState) => {  // prevState-->previous state and then update that previous state
+        //     return {
+        //         qty: prevState.qty + 1
+        //     }
+        // });
     }
     // increaseQuantity () {
     //     console.log('this', this.state); // we have to bind-->this where function is calling or we can simply use arror function which will automatically bind--> this  like we did above 
 
     // }
+   
+    //function to decrease quantity
+    decreaseQuantity = () => {
+        console.log("decreasing",this.state);
 
+        this.setState({
+            qty: this.state.qty - 1
+        });
+    }
     render (){
         const {price, title, qty} = this.state //we are using object destructuring
         return(
@@ -42,7 +62,13 @@ class CartItem extends React.Component{
                          src="https://cdn-icons.flaticon.com/png/512/4315/premium/4315609.png?token=exp=1654462181~hmac=7d9245b91a6a16fb4459ece7b119abdd"
                          onClick= {/*{this.increaseQuantity.bind(this) ->bind is needed when not using arror function}*/ this.increaseQuantity}
                          />
-                        <img alt="decrease" id="minus" className="action" src="https://cdn-icons.flaticon.com/png/512/2569/premium/2569198.png?token=exp=1654461915~hmac=bc8cd5874713831d731aded8e6a0b261"/>
+                        <img
+                         alt="decrease"
+                         id="minus" 
+                         className="action" 
+                         src="https://cdn-icons.flaticon.com/png/512/2569/premium/2569198.png?token=exp=1654461915~hmac=bc8cd5874713831d731aded8e6a0b261"
+                         onClick={this.decreaseQuantity}
+                        />
                         <img alt="delete" id="dustbin" className="action" src="https://cdn-icons-png.flaticon.com/512/3221/3221897.png"/>
                     
                     </div>
