@@ -16,16 +16,29 @@ class CartItem extends React.Component{
         console.log('this', this.state); // binding is not needed in arror function
         
         // 1st way to setState
+        //setState function is asynchronous so we don't know when it got finished so we can call callback function,same for //2nd way to setState.So it will print once it got finished updating
         this.setState({                // this is easy do this
             qty:this.state.qty + 1    //this is called shallow merging where only that property is changed not others
+        },() =>{
+            console.log("this.state",this.state);
         });
 
-        //2nd way to setState
+        //2nd way to setState          
         // this .setState((prevState) => {  // prevState-->previous state and then update that previous state
         //     return {
         //         qty: prevState.qty + 1
         //     }
         // });
+        // this .setState((prevState) => {  
+        //     return {
+        //         qty: prevState.qty + 1
+        //     }
+        // });
+        // this .setState((prevState) => {  
+        //     return {
+        //         qty: prevState.qty + 1
+        //     }
+        // });                              // Note****--> this will increase count by 4 and batching is still in the work as component is rendered only once but count increase by 4
     }
     // increaseQuantity () {
     //     console.log('this', this.state); // we have to bind-->this where function is calling or we can simply use arror function which will automatically bind--> this  like we did above 
@@ -34,9 +47,18 @@ class CartItem extends React.Component{
    
     //function to decrease quantity
     decreaseQuantity = () => {
+        const {qty} = this.state;       // using destructuring
+        
+        if(qty === 0){
+            return;
+        }
         console.log("decreasing",this.state);
 
-        this.setState({
+        this.setState({                      //Note****--> even if we call this.setState thrice within function it will not decrease or increase by thrice beacause of React property called batching,it will increase or decrease by only one or by number which is called at last
+            qty: this.state.qty - 5
+        });
+
+        this.setState({                     
             qty: this.state.qty - 1
         });
     }
