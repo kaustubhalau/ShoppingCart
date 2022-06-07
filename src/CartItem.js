@@ -1,16 +1,6 @@
 import React from "react";
 class CartItem extends React.Component{
-    //adding state to CartItem
-    constructor () {  
-      super();  // call constructor of component class it is imp to use it before--> this.
-      this.state = {
-        price:999,
-        title: 'Phone',
-        qty: 1,
-        img: ''
-      }  
-    }
-
+    
     // function to increase
     increaseQuantity = () => {
         console.log('this', this.state); // binding is not needed in arror function
@@ -63,14 +53,15 @@ class CartItem extends React.Component{
         });
     }
     render (){
-        const {price, title, qty} = this.state //we are using object destructuring
+        console.log("this.props", this.props);
+        const {price, title, qty} = this.props.product;  //we are using object destructuring and using this.props instead of this.state
         return(
             <div className="cart-item">
                 <div className="left-block">
                     <img style={styles.image} /> {/*object applies here which is defined down there */}
                 </div>
                 <div className="right-block">
-                    <div style={{fontSize: 25}}>{/*Phone*/ this.state.title }</div> {/*we can also add styles like this instead of making objects */}
+                    <div style={{fontSize: 25}}>{/*Phone*/ /*this.state.title*/title}</div> {/*we can also add styles like this instead of making objects */}
                     <div style={{color:'blue'}}>{/*Rs 999*/price}</div> {/*with the help of object destructuring we can directle use these properties */}
                     <div style={{fontSize: 20}}>Qty: {/*Qty: 1*/ qty}</div>
 

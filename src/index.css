@@ -39,5 +39,9 @@ code {
 #dustbin{
   height: 25px;
 }
+.cart{
+  display: flex;
+  flex-direction: column;
+}
 
 
