@@ -1,57 +1,57 @@
 import React from "react";
 class CartItem extends React.Component{
     
-    // function to increase
-    increaseQuantity = () => {
-        console.log('this', this.state); // binding is not needed in arror function
+    // // function to increase     /*********************The sate is moved to Cart so removing these functions because state is not present here */
+    // increaseQuantity = () => {
+    //     console.log('this', this.state); // binding is not needed in arror function
         
-        // 1st way to setState
-        //setState function is asynchronous so we don't know when it got finished so we can call callback function,same for //2nd way to setState.So it will print once it got finished updating
-        this.setState({                // this is easy do this
-            qty:this.state.qty + 1    //this is called shallow merging where only that property is changed not others
-        },() =>{
-            console.log("this.state",this.state);
-        });
+    //     // 1st way to setState
+    //     //setState function is asynchronous so we don't know when it got finished so we can call callback function,same for //2nd way to setState.So it will print once it got finished updating
+    //     this.setState({                // this is easy do this
+    //         qty:this.state.qty + 1    //this is called shallow merging where only that property is changed not others
+    //     },() =>{
+    //         console.log("this.state",this.state);
+    //     });
 
-        //2nd way to setState          
-        // this .setState((prevState) => {  // prevState-->previous state and then update that previous state
-        //     return {
-        //         qty: prevState.qty + 1
-        //     }
-        // });
-        // this .setState((prevState) => {  
-        //     return {
-        //         qty: prevState.qty + 1
-        //     }
-        // });
-        // this .setState((prevState) => {  
-        //     return {
-        //         qty: prevState.qty + 1
-        //     }
-        // });                              // Note****--> this will increase count by 4 and batching is still in the work as component is rendered only once but count increase by 4
-    }
-    // increaseQuantity () {
-    //     console.log('this', this.state); // we have to bind-->this where function is calling or we can simply use arror function which will automatically bind--> this  like we did above 
-
+    //     //2nd way to setState          
+    //     // this .setState((prevState) => {  // prevState-->previous state and then update that previous state
+    //     //     return {
+    //     //         qty: prevState.qty + 1
+    //     //     }
+    //     // });
+    //     // this .setState((prevState) => {  
+    //     //     return {
+    //     //         qty: prevState.qty + 1
+    //     //     }
+    //     // });
+    //     // this .setState((prevState) => {  
+    //     //     return {
+    //     //         qty: prevState.qty + 1
+    //     //     }
+    //     // });                              // Note****--> this will increase count by 4 and batching is still in the work as component is rendered only once but count increase by 4
     // }
+    // // increaseQuantity () {
+    // //     console.log('this', this.state); // we have to bind-->this where function is calling or we can simply use arror function which will automatically bind--> this  like we did above 
+
+    // // }
    
-    //function to decrease quantity
-    decreaseQuantity = () => {
-        const {qty} = this.state;       // using destructuring
+    // //function to decrease quantity
+    // decreaseQuantity = () => {
+    //     const {qty} = this.state;       // using destructuring
         
-        if(qty === 0){
-            return;
-        }
-        console.log("decreasing",this.state);
+    //     if(qty === 0){
+    //         return;
+    //     }
+    //     console.log("decreasing",this.state);
 
-        this.setState({                      //Note****--> even if we call this.setState thrice within function it will not decrease or increase by thrice beacause of React property called batching,it will increase or decrease by only one or by number which is called at last
-            qty: this.state.qty - 5
-        });
+    //     this.setState({                      //Note****--> even if we call this.setState thrice within function it will not decrease or increase by thrice beacause of React property called batching,it will increase or decrease by only one or by number which is called at last
+    //         qty: this.state.qty - 5
+    //     });
 
-        this.setState({                     
-            qty: this.state.qty - 1
-        });
-    }
+    //     this.setState({                     
+    //         qty: this.state.qty - 1
+    //     });
+    // }
     render (){
         console.log("this.props", this.props);
         const {price, title, qty} = this.props.product;  //we are using object destructuring and using this.props instead of this.state
@@ -73,16 +73,21 @@ class CartItem extends React.Component{
                          id="plus"
                          className="action" 
                          src="https://cdn-icons.flaticon.com/png/512/4315/premium/4315609.png?token=exp=1654462181~hmac=7d9245b91a6a16fb4459ece7b119abdd"
-                         onClick= {/*{this.increaseQuantity.bind(this) ->bind is needed when not using arror function}*/ this.increaseQuantity}
+                        // onClick= this.increaseQuantity.bind(this) ->bind is needed when not using arroy function   this.increaseQuantity 
+                        onClick={() => this.props.onIncreaseQuantity(this.props.product)}
                          />
+
                         <img
                          alt="decrease"
                          id="minus" 
                          className="action" 
                          src="https://cdn-icons.flaticon.com/png/512/2569/premium/2569198.png?token=exp=1654461915~hmac=bc8cd5874713831d731aded8e6a0b261"
-                         onClick={this.decreaseQuantity}
+                         onClick={()=> this.props.onDecreaseQuantity(this.props.product)}
                         />
-                        <img alt="delete" id="dustbin" className="action" src="https://cdn-icons-png.flaticon.com/512/3221/3221897.png"/>
+
+                        <img alt="delete" id="dustbin" className="action" src="https://cdn-icons-png.flaticon.com/512/3221/3221897.png" 
+                         onClick={()=>this.props.onDeleteProduct(this.props.product.id)}
+                        />
                     
                     </div>
 
