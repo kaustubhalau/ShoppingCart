@@ -58,7 +58,7 @@ class CartItem extends React.Component{
         return(
             <div className="cart-item">
                 <div className="left-block">
-                    <img style={styles.image} /> {/*object applies here which is defined down there */}
+                    <img style={styles.image} src = {this.props.product.img}/> {/*object applies here which is defined down there */}
                 </div>
                 <div className="right-block">
                     <div style={{fontSize: 25}}>{/*Phone*/ /*this.state.title*/title}</div> {/*we can also add styles like this instead of making objects */}
