@@ -2,38 +2,45 @@ import React from 'react';
 import CartItem from './CartItem';
 import Cart from './Cart';
 import Navbar from './Navbar';
+import firebase from 'firebase/compat/app'
+import 'firebase/compat/firestore';
+
 
 class App extends React.Component {
    //adding state 
    constructor () {  
     super();  // call constructor of component class it is imp to use it before--> this.
     this.state = {
-      products: [
-      {
-          price:99999,
-          title: 'Television',
-          qty: 1,
-          img: 'https://images.unsplash.com/photo-1595935736128-db1f0a261263?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=871&q=80',
-          id:1
-      },
-      {
-          price:15000,
-          title: 'Mobile Phone',
-          qty: 1,
-          img: 'https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=329&q=80',
-          id:2
-      },
-      {
-          price:30999,
-          title: 'Apple Watch',
-          qty: 1,
-          img: 'https://images.unsplash.com/photo-1579586337278-3befd40fd17a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=872&q=80',
-          id:3
-      },
-  
-  ]  
+      products: [],
+      loading: true  // this for when page loades nothing special its not compulsory  
       
     }   
+  }
+
+  componentDidMount(){  //this function will work after rendering
+    firebase
+      .firestore()
+      .collection('products')  // get product collection
+      .get()    // return us a promise with result
+      .then((snapshot) =>{
+        console.log(snapshot); //see in console there we will find docs in next line we will retrieve that doc
+
+        snapshot.docs.map((doc) =>{
+          console.log(doc.data());
+        })
+
+        const products = snapshot.docs.map((doc) => {
+          const data = doc.data();
+
+          data['id'] = doc.id  // add id field and use doc id in firebase because every document has id
+          return data;
+        })
+
+        this.setState({
+          products:products, // update products
+          loading:false  // we defined it true below product array and did conditional rendering using it in render function
+        })
+      })
   }
 
   handleIncreaseQuantity = (product) => {   // it's very easy just read line byline you will understand
@@ -59,7 +66,7 @@ class App extends React.Component {
       products[index].qty -= 1;  //store the value in this products
 
       this.setState({
-          products:products  // update
+          products:products,  // update
       })
   }
 
@@ -90,14 +97,17 @@ class App extends React.Component {
 
     let cartTotal = 0;
 
-    products.map((product)=>{
-      cartTotal = cartTotal + product.qty * product.price;
+    products.map(product=>{
+      if(product.qty > 0){
+        cartTotal = cartTotal + product.qty * product.price;
+      }
+      return ''
     })
 
     return cartTotal
   }
   render(){
-    const {products} = this.state;
+    const {products, loading} = this.state;
     return (
       <div className="App">
         <Navbar count = {this.getCartCount()}/>
@@ -105,10 +115,12 @@ class App extends React.Component {
         products = {products}
          onIncreaseQuantity = {this.handleIncreaseQuantity} onDecreaseQuantity = {this.handleDecreaseQuantity} onDeleteProduct = {this.handleDeleteProduct}
          />
-         
+        
+         {/*we will do conditional rendering, this is for loading page we have define it on top below product array */}
+         {loading && <h3>Loading Products...</h3>}
         
          <div style={{fontSize: 20,padding: 10}}>Total:{this.getCartTotal()}</div>
-
+         
       </div>
     );
   }
